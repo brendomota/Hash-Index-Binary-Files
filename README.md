@@ -45,10 +45,14 @@ mais de uma pode aparecer):
 
 #### Observações
   a) Para tratar as colisões utilize Overflow Progressivo;
+  
   b) Considere uma hash de 13 posições;
+  
   c) Utilize o Método da Divisão Inteira para encontrar o endereçamento de uma dada chave (função
   hash);
+  
   d) Cada endereçamento contém duas chaves (está sendo utilizado o conceito de Bucket);
+  
   e) Lembre-se que o arquivo hash é um arquivo de registros fixos que contém, no mínimo, duas
   informações: Chave + RRN. Campos adicionais podem ser acrescentados se necessário.
 
