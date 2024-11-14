@@ -67,9 +67,13 @@ void carregarFiles()
         char nome_disc[50];
         float media;
         float freq;
-    } vet[3] = {{"001", "001", "Nome-1", "Disc-001", 8.9, 80.3},
-                {"002", "001", "Nome-2", "Disc-001", 3.3, 72.3},
-                {"001", "002", "Nome-1", "Disc-002", 9.7, 73.7}};
+    } vet[7] = {{"000", "001", "Nome-1", "Disc-111", 1, 1},
+                {"000", "014", "Nome-14", "Disc-222", 2, 2},
+                {"000", "027", "Nome-27", "Disc-333", 3, 3},
+                {"000", "040", "Nome-40", "Disc-444", 4, 4},
+                {"000", "053", "Nome-53", "Disc-555", 5, 5},
+                {"000", "066", "Nome-66", "Disc-666", 6, 6},
+                {"000", "053", "Nome-53", "Disc-777", 7, 7}}; // chave duplicada
 
     fd = fopen("insere.bin", "w+b");
     fwrite(vet, sizeof(vet), 1, fd);
@@ -80,8 +84,11 @@ void carregarFiles()
     {
         char id_aluno[4];
         char sigla_disc[4];
-    } vet_b[2] = {{"001", "001"},
-                  {"001", "002"}};
+    } vet_b[5] = {{"000", "014"},
+                  {"000", "040"},
+                  {"000", "053"},
+                  {"000", "066"},
+                  {"000", "066"}};
 
     fd = fopen("busca.bin", "w+b");
     fwrite(vet_b, sizeof(vet_b), 1, fd);
@@ -92,7 +99,8 @@ void carregarFiles()
     {
         char id_aluno[4];
         char sigla_disc[4];
-    } vet_r[1] = {{"001", "001"}};
+    } vet_r[2] = {{"000", "014"},
+                  {"000", "040"}};
 
     fd = fopen("remove.bin", "w+b");
     fwrite(vet_r, sizeof(vet_r), 1, fd);
@@ -490,17 +498,17 @@ int buscar()
 
 void remover()
 {
-    Bucket bucket;                         
-    FILE *hash = abrirArquivo("hash.bin"); 
+    Bucket bucket;
+    FILE *hash = abrirArquivo("hash.bin");
 
-    int endereco_hash = 0;                     
-    int count = 0;                             // Contador para o número de tentativas de busca
-    FILE *out = abrirArquivo("out.bin");       
-    FILE *remove = abrirArquivo("remove.bin"); 
-    Header header;                             
-    Key chave;                                 
-    Key nova_chave;                            
-    int pos_inicio_registro = 0;               
+    int endereco_hash = 0;
+    int count = 0; // Contador para o número de tentativas de busca
+    FILE *out = abrirArquivo("out.bin");
+    FILE *remove = abrirArquivo("remove.bin");
+    Header header;
+    Key chave;
+    Key nova_chave;
+    int pos_inicio_registro = 0;
 
     fread(&header, sizeof(header), 1, out);
     fseek(remove, (header.regRemovidos) * (sizeof(Key) - sizeof(int)), SEEK_SET);
@@ -510,7 +518,7 @@ void remover()
         return;
     }
 
-    fseek(remove, -1, SEEK_CUR); 
+    fseek(remove, -1, SEEK_CUR);
     fread(&chave, sizeof(chave) - sizeof(int), 1, remove);
 
     // Calcula o endereço inicial com base na função hash
